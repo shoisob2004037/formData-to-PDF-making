@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save Form Data as PDF</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amita:wght@400;700&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Kalnia+Glaze:wght@100..700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Sansita:ital,wght@0,400;0,700;0,800;0,900;1,400;1,700;1,800;1,900&family=Teko:wght@300..700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+        body {
+            font-family: "Josefin Sans", sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        #form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        #form input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        #btn {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <form id="form">
+        <label>Your Name: </label><input type="text" id="text" placeholder="Your Name...">
+        <label>Your ID: </label><input type="text" id="number" placeholder="Your ID...">
+        <label>Your Institution: </label><input type="text" id="inst" placeholder="Your Institution...">
+        <label>Your Department: </label><input type="text" id="dept" placeholder="Your Dept...">
+
+        <button type="button" id="btn">Make PDF</button>
+    </form>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        document.getElementById("btn").addEventListener('click', function () {
+            const { jsPDF } = window.jspdf;
+            const name = document.getElementById("text").value;
+            const id = document.getElementById("number").value;
+            const inst = document.getElementById("inst").value;
+            const dept = document.getElementById("dept").value;
+
+
+            var doc = new jsPDF();
+
+            doc.setFillColor(240, 240, 240); 
+            doc.rect(0, 0, 210, 297, 'F'); 
+
+        
+
+            const headerStyle = {
+                fontSize: 30,
+                color: [0, 0, 255],
+                font: 'Josefin Sans',
+                fontStyle: 'bold'
+            };
+            const subHeaderStyle = {
+                fontSize: 20,
+                color: [0, 0, 0] 
+            };
+            const nameStyle = {
+                fontSize: 24,
+                color: [0, 128, 0],
+                font: 'Josefin Sans',
+                fontStyle: 'italic'
+            };
+            const footerStyle = {
+                fontSize: 16,
+                color: [128, 0, 0] 
+            };
+
+            doc.setFontSize(headerStyle.fontSize);
+            doc.setTextColor(...headerStyle.color);
+            doc.text("Certificate of Achievement", 40, 40);
+
+            
+            doc.setFontSize(subHeaderStyle.fontSize);
+            doc.setTextColor(...subHeaderStyle.color);
+            doc.text("This is to certify that", 20, 70);
+
+            doc.setFontSize(nameStyle.fontSize);
+            doc.setTextColor(...nameStyle.color);
+            doc.text(name, 20, 100);
+
+            doc.line(20, 105, 180, 105);
+
+            doc.setFontSize(subHeaderStyle.fontSize);
+            doc.setTextColor(...subHeaderStyle.color);
+            doc.text("ID: " + id, 20, 120);
+
+            doc.setFontSize(subHeaderStyle.fontSize);
+            doc.setTextColor(...subHeaderStyle.color);
+            doc.text("Department of : " + dept, 20, 140);
+
+            doc.text("From : " + inst, 20, 160);
+
+            doc.setFontSize(subHeaderStyle.fontSize);
+            doc.setTextColor(...subHeaderStyle.color);
+            doc.text("Completed the PDF Generation from the Form Data. " , 20, 180);
+
+            doc.setFontSize(footerStyle.fontSize);
+            doc.setTextColor(...footerStyle.color);
+            doc.text("This certificate is awarded on", 20, 200);
+            doc.text(new Date().toLocaleDateString(), 20, 220);
+
+            doc.save("certificate.pdf");
+        });
+    </script>
+</body>
+</html>
